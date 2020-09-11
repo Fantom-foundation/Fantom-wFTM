@@ -3,8 +3,6 @@ pragma solidity ^0.5.0;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20Detailed.sol";
-import "@openzeppelin/contracts/token/ERC20/ERC20Mintable.sol";
-import "@openzeppelin/contracts/token/ERC20/ERC20Burnable.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20Pausable.sol";
 
 /**
@@ -13,8 +11,7 @@ import "@openzeppelin/contracts/token/ERC20/ERC20Pausable.sol";
  * The local FTM pool size will always match the total supply of wFTM tokens
  * since they are minted on deposit and burned on withdraw in 1:1 ratio.
  */
-contract WrappedFtm is ERC20, ERC20Detailed, ERC20Mintable, ERC20Burnable, ERC20Pausable {
-
+contract WrappedFtm is ERC20, ERC20Detailed, ERC20Pausable {
 	// Error Code: No error.
 	uint256 public constant ERR_NO_ERROR = 0x0;
 
@@ -27,7 +24,7 @@ contract WrappedFtm is ERC20, ERC20Detailed, ERC20Mintable, ERC20Burnable, ERC20
 
     // deposit wraps received FTM tokens as wFTM in 1:1 ratio by minting
     // the received amount of FTMs in wFTM on the sender's address.
-    function deposit() public payable returns (uint256) {
+    function deposit() public whenNotPaused payable returns (uint256) {
     	// there has to be some value to be converted
     	if (msg.value == 0) {
     		return ERR_INVALID_ZERO_VALUE;
@@ -43,7 +40,7 @@ contract WrappedFtm is ERC20, ERC20Detailed, ERC20Mintable, ERC20Burnable, ERC20
     // withdraw unwraps FTM tokens by burning specified amount
     // of wFTM from the caller address and sending the same amount
     // of FTMs back in exchange.
-    function withdraw(uint256 amount) public returns (uint256) {
+    function withdraw(uint256 amount) public whenNotPaused returns (uint256) {
     	// there has to be some value to be converted
     	if (amount == 0) {
     		return ERR_INVALID_ZERO_VALUE;
