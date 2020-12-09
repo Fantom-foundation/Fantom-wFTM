@@ -18,7 +18,7 @@ contract WrappedFtm is ERC20, ERC20Detailed, ERC20Pausable {
 	// Error Code: Non-zero value expected to perform the function.
 	uint256 public constant ERR_INVALID_ZERO_VALUE = 0x01;
 
-    // create instance of the fUSD token
+    // create instance of the wFTM token
     constructor () public ERC20Detailed("Wrapped Fantom", "WFTM", 18) {
     }
 
